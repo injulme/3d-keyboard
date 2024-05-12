@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 
 const themes = {
   red: {
@@ -23,8 +24,18 @@ export default function Keyboard(props) {
   materials.MAT_Keys.color = new THREE.Color(themes[theme].keyColor);
   materials.MAT_Plastic.color = new THREE.Color(themes[theme].boardColor);
 
+  const group = useRef();
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, Math.cos(t / 2) / 20 + 0.25, 0.1);
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, Math.sin(t / 4) / 20, 0.1);
+    group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, Math.sin(t / 8) / 20, 0.1);
+    group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, (-2 + Math.sin(t / 2)) / 2, 0.1);
+  });
+
   return (
-    <group {...props} dispose={null}>
+    <group ref={group} {...props} dispose={null}>
       <group scale={3} rotation={[-1.4, Math.PI + 0.2, -0.3]} position={[1.5, 2.5, 0]}>
         <mesh
           castShadow
