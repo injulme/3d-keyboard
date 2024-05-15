@@ -11,7 +11,7 @@ export default function Page() {
       <section className="page-section">
         <MainCanvas theme={selectedTheme} />
       </section>
-      <section className="page-section bg-white">
+      <section className="page-section">
         <div className="page-section__button-group">
           {themes.map((theme) => {
             return (
